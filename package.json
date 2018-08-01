@@ -11,7 +11,8 @@
   "license": "MIT",
   "dependencies": {
     "lite-server": "^2.4.0",
-    "rx": "^4.1.0"
+    "rx": "^4.1.0",
+    "rx-dom": "^7.0.3"
   },
   "devDependencies": {},
   "description": ""
