@@ -11,22 +11,21 @@ function loadJSONP(url) {
 var map = L.map('map').setView([33.858631, -118.279602], 7);
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
 
-var quakes = Rx.Observable.create(observer => {
-  window.eqfeed_callback = function (response) {
-    observer.onNext(response)
-    observer.onCompleted()
-  }
-
-  loadJSONP(QUAKE_URL)
+var quakes = Rx.DOM.jsonpRequest({
+  url: QUAKE_URL,
+  jsonpCallback: 'eqfeed_callback'
 })
-.flatMap(dataset => {
-  return Rx.Observable.from(dataset.features)
+.flatMap(result => {
+  return Rx.Observable.from(result.response.features)
+})
+.map(quake => {
+  return {
+    lat: quake.geometry.coordinates[1],
+    lng: quake.geometry.coordinates[0],
+    size: quake.properties.mag * 10000
+  }
 })
 
 quakes.subscribe(quake => {
-  var coords = quake.geometry.coordinates;
-  var size = quake.properties.mag * 10000;
-  var latlng = L.latLng(coords[1], coords[0]);
-
-  L.circle(latlng, size).addTo(map);
+  L.circle([quake.lat, quake.lng], quake.size).addTo(map);
 })
