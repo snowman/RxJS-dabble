@@ -13,13 +13,14 @@ L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
 
 var quakes = Rx.Observable.create(observer => {
   window.eqfeed_callback = function (response) {
-    var quakes = response.features;
-    quakes.forEach(quake => {
-      observer.onNext(quake);
-    })
+    observer.onNext(response)
+    observer.onCompleted()
   }
 
   loadJSONP(QUAKE_URL)
+})
+.flatMap(dataset => {
+  return Rx.Observable.from(dataset.features)
 })
 
 quakes.subscribe(quake => {
