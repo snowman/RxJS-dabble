@@ -1,14 +1,12 @@
 var Rx = require('./node_modules/rx/dist/rx.all.js');
 
 Rx.Observable.create(observer => {
-  observer.onNext(Rx.Observable.range(1, 5))
-  observer.onNext(Rx.Observable.range(6, 10))
+  observer.onNext(10)
+  observer.onNext(2)
   observer.onCompleted()
 })
-.flatMap(observable => {
-  var values = [];
-  observable.subscribe((value) => values.push(value));
-  return Rx.Observable.from(values);
+.flatMap(value => {
+  return Rx.Observable.range(1, value);
 })
 
 .subscribe(function(value) {
