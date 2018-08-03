@@ -20,7 +20,6 @@ var quakes = Rx.Observable
     }).retry(3)
   })
   .flatMap(result => {
-    debugger
     return Rx.Observable.from(result.response.features)
   })
   .distinct(quake => quake.properties.code)
