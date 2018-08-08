@@ -16,6 +16,8 @@
     "rx": "^4.1.0",
     "rx-dom": "^7.0.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "qunit": "^2.6.1"
+  },
   "description": ""
 }
